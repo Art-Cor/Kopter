@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
+using System.Collections;
 using static MAVLink;
 
 public enum CUSTOM_MODE 
@@ -30,7 +31,7 @@ public class MAVlinkResever: MonoBehaviour
     public float[] motorRpm = new float[4];
     public Vector3 posxyz;
     public Vector3 velocity;
-    private byte[] buffer = new byte[1];
+    private Queue<Byte[]> buffer = new Queue<Byte[]>();
     private double metersPerDegreeLon = 111111.0 * Math.Cos(-35.3632621 * Math.PI / 180.0);
     public event Action<Vector3> OnPosUpdated;
 
@@ -72,10 +73,10 @@ public class MAVlinkResever: MonoBehaviour
                 byte[] receivedBytes = udpClient.Receive(ref remoteEndPoint);
                 MAVLinkMessage msg = mavlinkParser.ReadPacket(new System.IO.MemoryStream(receivedBytes));
                 ProcessMavlinkMessage(msg);
-                if (buffer.Length>1)
+                if (buffer.Count>0)
                 {
-                    udpClient.Send(buffer, buffer.Length, remoteEndPoint);
-                    buffer = new byte[1];
+                    Byte[] buf = buffer.Dequeue();
+                    udpClient.Send(buf, buf.Length, remoteEndPoint);
                     Thread.Sleep(500);
                 }
             }
@@ -94,14 +95,10 @@ public class MAVlinkResever: MonoBehaviour
             base_mode = (byte)129,
             custom_mode = (uint)4
         };
-        while (buffer.Length>1)
-        {
-            Thread.Sleep(300);
-        }
-        buffer = mavlinkParser.GenerateMAVLinkPacket20(
+        buffer.Enqueue(mavlinkParser.GenerateMAVLinkPacket20(
             MAVLINK_MSG_ID.SET_MODE,
             packet
-        );
+        ));
         Debug.Log($"Режим GUIDED активирован");
     }
 
@@ -122,14 +119,10 @@ public class MAVlinkResever: MonoBehaviour
             param7 = 0,
             confirmation = 0
         };
-        while (buffer.Length>1)
-        {
-            Thread.Sleep(300);
-        }
-        buffer = mavlinkParser.GenerateMAVLinkPacket20(
+        buffer.Enqueue(mavlinkParser.GenerateMAVLinkPacket20(
             MAVLINK_MSG_ID.COMMAND_LONG,
             packet
-        );
+        ));
     }
 
     public void Takeoff()
@@ -149,14 +142,10 @@ public class MAVlinkResever: MonoBehaviour
             param7 = 10,
             confirmation = 0
         };
-        while (buffer.Length>1)
-        {
-            Thread.Sleep(300);
-        }
-        buffer = mavlinkParser.GenerateMAVLinkPacket20(
+        buffer.Enqueue(mavlinkParser.GenerateMAVLinkPacket20(
             MAVLINK_MSG_ID.COMMAND_LONG,
             packet
-        );
+        ));
     }
 
     public void DoRepos(Vector3 point)
@@ -183,14 +172,10 @@ public class MAVlinkResever: MonoBehaviour
             param7 = 0,
             confirmation = 0
         };
-        while (buffer.Length>1)
-        {
-            Thread.Sleep(300);
-        }
-        buffer = mavlinkParser.GenerateMAVLinkPacket20(
+        buffer.Enqueue(mavlinkParser.GenerateMAVLinkPacket20(
             MAVLINK_MSG_ID.COMMAND_LONG,
             packet
-        );
+        ));
     }
     
     private List<mavlink_mission_item_int_t> CreateSimpleMission(List<Vector3> point, bool full=true)
@@ -265,14 +250,10 @@ public class MAVlinkResever: MonoBehaviour
             target_component = 1,
             type = (byte)1
         };
-        while (buffer.Length>1)
-        {
-            Thread.Sleep(300);
-        }
-        buffer = mavlinkParser.GenerateMAVLinkPacket20(
+        buffer.Enqueue(mavlinkParser.GenerateMAVLinkPacket20(
             MAVLINK_MSG_ID.MISSION_ACK,
             packet
-        );
+        ));
     }
 
     private void SendMissionCount(ushort count)
@@ -283,14 +264,10 @@ public class MAVlinkResever: MonoBehaviour
             target_component = 1,
             count = count
         };
-        while (buffer.Length>1)
-        {
-            Thread.Sleep(300);
-        }
-        buffer = mavlinkParser.GenerateMAVLinkPacket20(
+        buffer.Enqueue(mavlinkParser.GenerateMAVLinkPacket20(
             MAVLINK_MSG_ID.MISSION_COUNT,
             packet
-        );
+        ));
         Debug.Log($"Отправлено количество элементов миссии: {count}");
     }
 
@@ -313,14 +290,10 @@ public class MAVlinkResever: MonoBehaviour
             y = item.y,
             z = item.z
         };
-        while (buffer.Length>1)
-        {
-            Thread.Sleep(300);
-        }
-        buffer = mavlinkParser.GenerateMAVLinkPacket20(
+        buffer.Enqueue(mavlinkParser.GenerateMAVLinkPacket20(
             MAVLINK_MSG_ID.MISSION_ITEM_INT,
             packet
-        );
+        ));
         Debug.Log($"Отправлен элемент миссии {seq + 1}/{count}: Команда={packet.command}");
     }
 
@@ -333,15 +306,10 @@ public class MAVlinkResever: MonoBehaviour
             target_component = 1,
             confirmation = 0
         };
-    
-        while (buffer.Length > 1)
-        {
-            Thread.Sleep(300);
-        }
-        buffer = mavlinkParser.GenerateMAVLinkPacket20(
+        buffer.Enqueue(mavlinkParser.GenerateMAVLinkPacket20(
             MAVLINK_MSG_ID.COMMAND_LONG,
             packet
-        );
+        ));
         Debug.Log("Команда запуска миссии отправлена");
     }
 
@@ -354,15 +322,10 @@ public class MAVlinkResever: MonoBehaviour
             target_component = 1,
             confirmation = 0
         };
-    
-        while (buffer.Length > 1)
-        {
-            Thread.Sleep(300);
-        }
-        buffer = mavlinkParser.GenerateMAVLinkPacket20(
+        buffer.Enqueue(mavlinkParser.GenerateMAVLinkPacket20(
             MAVLINK_MSG_ID.COMMAND_LONG,
             packet
-        );
+        ));
         Debug.Log("Команда очистки миссии отправлена");
     }
 
