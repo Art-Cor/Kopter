@@ -305,11 +305,11 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.012, y: 0.123, z: -0.028}
+  m_LocalPosition: {x: 0.012, y: 0.639, z: -0.028}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1289775495}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
@@ -367,8 +367,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e017bd54a9fbe4196643c7d01f2482, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sens: 1
-  speed: 20
+  sens: 100
+  speed: 10
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,17 +868,8 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 5c122f6810510a841ace5fa306fcc408, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8e024b87c9bb595408301d98c78ab5d2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 330585546}
+    m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8e024b87c9bb595408301d98c78ab5d2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1289775492}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8e024b87c9bb595408301d98c78ab5d2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1289775491}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8e024b87c9bb595408301d98c78ab5d2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1289775494}
@@ -891,54 +882,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8e024b87c9bb595408301d98c78ab5d2, type: 3}
   m_PrefabInstance: {fileID: 1026106461}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1289775491
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289775489}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.3, y: 0.2, z: 0.5}
-  m_Center: {x: 0, y: 0.05, z: 0}
---- !u!54 &1289775492
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289775489}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &1289775493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -963,6 +906,7 @@ MonoBehaviour:
   - 1
   - 1
   posxyz: {x: 0, y: 0, z: 0}
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &1289775494
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -980,12 +924,7 @@ MonoBehaviour:
   RotorLB: {fileID: 1318641962}
   RotorRB: {fileID: 1963255252}
   MAVlinkResever: {fileID: 1289775493}
-  speed: 1500
---- !u!4 &1289775495 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8e024b87c9bb595408301d98c78ab5d2, type: 3}
-  m_PrefabInstance: {fileID: 1026106461}
-  m_PrefabAsset: {fileID: 0}
+  speed: 5000
 --- !u!1 &1318641962 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -384277897149325717, guid: 8e024b87c9bb595408301d98c78ab5d2, type: 3}
@@ -1111,14 +1050,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27774e16f817a384692613df1503427f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showPosition: 1
-  showRotation: 1
-  showFPS: 1
   fontSize: 20
   textColor: {r: 1, g: 1, b: 1, a: 1}
   screenPadding: {x: 10, y: 10}
-  customLabel: Custom
-  customValue: 0
+  customLabel1: Custom1
+  customValue1: 
+  customLabel2: Custom2
+  customValue2: 
+  customLabel3: Custom3
+  customValue3: 
+  customLabel4: Custom4
+  customValue4: 
 --- !u!1 &1761420147
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,6 +1167,7 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 1761420150}
   - {fileID: 1026106461}
+  - {fileID: 330585546}
   - {fileID: 168178769}
   - {fileID: 1612861451}
   - {fileID: 864222502}
