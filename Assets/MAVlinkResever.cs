@@ -224,7 +224,7 @@ public class MAVlinkResever: MonoBehaviour
         return missionItems;
     }
 
-    private void CreateAndUploadMission(List<Vector3> point, bool full=true)
+    public void CreateAndUploadMission(List<Vector3> point, bool full=true)
     {
         var missionItems = CreateSimpleMission(point, full);
         ushort count = (ushort)missionItems.Count;
@@ -354,7 +354,7 @@ public class MAVlinkResever: MonoBehaviour
 
             case (uint)MAVLINK_MSG_ID.HEARTBEAT:
                 var heartbeat = (mavlink_heartbeat_t)msg.data;
-                Debug.Log($"Heartbeat: Type={(MAV_TYPE)heartbeat.type}, Mode={(MAV_MODE)heartbeat.base_mode}");
+                //Debug.Log($"Heartbeat: Type={(MAV_TYPE)heartbeat.type}, Mode={(MAV_MODE)heartbeat.base_mode}");
                 break;
 
             case (uint)36: 
@@ -402,57 +402,6 @@ public class MAVlinkResever: MonoBehaviour
             default:
                 //Debug.Log($"id {msg.msgid} {msg.data}");
                 break;
-        }
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            SetGuidedMode();
-            ArmDrone();
-        }
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            Takeoff();
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            ClearMission();
-            CreateAndUploadMission(new List<Vector3> (new Vector3[]{ new Vector3(
-                    10,
-                    10,
-                    0
-                ),
-                new Vector3(
-                    0,
-                    10,
-                    0
-                )}));
-        }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            StartMission();
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            DoRepos(new Vector3(
-                10,
-                10,
-                15
-            ));
-        }
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            DoRepos(new Vector3(
-                0,
-                10,
-                0
-            ));
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {  
-            Land();
         }
     }
 }
